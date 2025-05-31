@@ -10,7 +10,7 @@ class BaseModel(models.Model):
     class Meta:
         abstract = True
 
-class Currency(models.model):
+class Currency(models.Model):
     # currency models for handle define new currency without edit code from django admin safely
     name =  models.CharField(max_length=8, unique=True)
     symbol = models.CharField(max_length=8, unique=True)
@@ -25,8 +25,8 @@ class Market(BaseModel):
 
 
     symbol = models.CharField(max_length=17, null=True, db_index=True, unique=True)
-    first_currency = models.ForeignKey('Currency',on_delete=models.DO_NOTHING, null=True)
-    second_currency = models.ForeignKey('Currency',on_delete=models.DO_NOTHING, null=True)
+    first_currency = models.ForeignKey('market.Currency',on_delete=models.DO_NOTHING, null=True,related_name ='market_first_currency')
+    second_currency = models.ForeignKey('market.Currency',on_delete=models.DO_NOTHING, null=True,related_name ='market_second_currency')
     state = models.CharField(choices=STATUS_CHOICES, max_length=15, default='Active')
     
     def __str__(self):

@@ -1,5 +1,5 @@
 from django.db import models
-from market.models import BaseModel, Market , Currency
+from market.models import BaseModel, Market
 from django.core.validators import MinValueValidator
 from decimal import Decimal
 
@@ -9,7 +9,10 @@ class Order(BaseModel):
     @staticmethod
     def get_market_symbols():
         # Fetch all market symbols from the Market model
-        return [(market.symbol, market.symbol) for market in Market.objects.all()]
+        try:
+            return [(market.symbol, market.symbol) for market in Market.objects.all()]
+        except:
+            return None
     
 
     ORDER_TYPE=(('Market' , 'market'),('Limit','limit'))
@@ -26,9 +29,9 @@ class Order(BaseModel):
         
        
 
-    first_currency = models.ForeignKey('Currency',on_delete=models.DO_NOTHING)
-    second_currency = models.ForeignKey('Currency',on_delete=models.DO_NOTHING)
-    order_type = models.CharField(choices=ORDER_TYPE, max_length=15, default='Market')
+    first_currency = models.ForeignKey('market.Currency',on_delete=models.DO_NOTHING, related_name='orders_as_first')
+    second_currency = models.ForeignKey('market.Currency',on_delete=models.DO_NOTHING, related_name='orders_as_second')
+    order_type = models.CharField(choices=ORDER_TYPE, max_length=15, default='Market', null=True,blank=True)
     order_side = models.CharField(choices=ORDER_SIDE, max_length=5)
     order_state = models.CharField(choices=ORDER_STATE, max_length=40)
     target_market = models.CharField(max_length=10, choices=get_market_symbols())
