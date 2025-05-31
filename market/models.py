@@ -13,27 +13,24 @@ class BaseModel(models.Model):
 class Currency(models.model):
     # currency models for handle define new currency without edit code from django admin safely
     name =  models.CharField(max_length=8, unique=True)
-    simbol = models.CharField(max_length=8, unique=True)
+    symbol = models.CharField(max_length=8, unique=True)
 
 class Market(BaseModel):
-    ACTIVE = 'active'
-    SUSPEND = 'suspend'
-    DEACTIVE = 'deactive'
 
     STATUS_CHOICES = [
-        (ACTIVE, 'active'),
-        (SUSPEND, 'suspend'),
-        (DEACTIVE, 'deactive'),
+        ('Active', 'active'),
+        ('Suspend', 'suspend'),
+        ('Deactive', 'deactive'),
     ]
 
 
-    simbol = models.CharField(max_length=17, null=True, db_index=True, unique=True)
+    symbol = models.CharField(max_length=17, null=True, db_index=True, unique=True)
     first_currency = models.ForeignKey('Currency',on_delete=models.DO_NOTHING, null=True)
     second_currency = models.ForeignKey('Currency',on_delete=models.DO_NOTHING, null=True)
-    state = models.CharField(choices=STATUS_CHOICES, max_length=15, default=ACTIVE)
+    state = models.CharField(choices=STATUS_CHOICES, max_length=15, default='Active')
     
     def __str__(self):
-        return self.simbol
+        return self.symbol
     
     class Meta:
         unique_together = ('first_currency','second_currency')
