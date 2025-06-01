@@ -46,13 +46,17 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # Apps of service
-    'matching',
-    'order',
-    'market',
-    'trade',
+    'core',
+    'currencies',
+    'orders',
+    'orderbook',
+    'tasks',
+    'api',
 
     # Third-party apps
     'rest_framework',
+    'django.contrib.admin',
+    'channels',
 
 ]
 
@@ -162,3 +166,22 @@ STATIC_URL = '/static/'
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+
+#celery configs
+CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+#channel configs
+CHANNEL_LAYERS = {
+    'default': {
+        'BACKEND': 'channels_redis.core.RedisChannelLayer',
+        'CONFIG': {
+            'hosts': [('127.0.0.1', 6379)],
+        },
+    },
+}
+
+
+REDIS_PASSWORD = None  
+REDIS_URL = f'redis://{env('REDIS_HOST')}:{env('REDIS_PORT')}/{env('REDIS_DB')}'
