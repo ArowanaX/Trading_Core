@@ -18,8 +18,8 @@ class Market(BaseModel):
 
 
     symbol = models.CharField(max_length=17, unique=True, editable=False)
-    base_currency = models.ForeignKey('market.Currency',on_delete=models.DO_NOTHING, null=True,related_name ='market_base_currency')
-    quote_currency = models.ForeignKey('market.Currency',on_delete=models.DO_NOTHING, null=True,related_name ='market_quote_currency')
+    base_currency = models.ForeignKey('currencies.Currency',on_delete=models.DO_NOTHING, null=True,related_name ='market_base_currency')
+    quote_currency = models.ForeignKey('currencies.Currency',on_delete=models.DO_NOTHING, null=True,related_name ='market_quote_currency')
     state = models.CharField(choices=STATUS_CHOICES, max_length=15, default='Active')
     fee = models.DecimalField(max_digits=5, decimal_places=4, default=0)
     
@@ -27,7 +27,7 @@ class Market(BaseModel):
         return self.symbol
     
     class Meta:
-        unique_together = ('first_currency','second_currency')
+        unique_together = ('base_currency','quote_currency')
         indexes = [
             models.Index(fields=['base_currency','quote_currency']),
         ]
