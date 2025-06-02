@@ -167,9 +167,8 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
-#celery configs
-CELERY_BROKER_URL = 'amqp://guest:guest@localhost:5672//'
-CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+
 
 #channel configs
 # CHANNEL_LAYERS = {
@@ -186,3 +185,17 @@ REDIS_PORT=env('REDIS_PORT')
 REDIS_DB=env('REDIS_DB')
 REDIS_PASSWORD = None  
 REDIS_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
+
+
+#celery configs
+CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+CELERY_RESULT_BACKEND =  f'redis://{REDIS_HOST}:{REDIS_PORT}/1'
+
+
+CELERY_BEAT_SCHEDULE = {
+    'sync-order-book': {
+        'task': 'tasks.tasks.sync_order_book_task',
+        'schedule': 5.0,
+        'args': ('BTC_USDT',),  
+    },
+}
