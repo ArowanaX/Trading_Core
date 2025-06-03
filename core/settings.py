@@ -50,7 +50,7 @@ INSTALLED_APPS = [
     'currencies',
     'orders',
     'orderbook',
-    'tasks',
+    'tasks',#this app was added, but was commented out after the first review because the project was simpler.
     'api',
 
     # Third-party apps
@@ -88,19 +88,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'core.wsgi.application'
-
-# # Django Rest Framework settings
-# REST_FRAMEWORK = {
-#     'DEFAULT_AUTHENTICATION_CLASSES': [
-#         'rest_framework.authentication.TokenAuthentication',
-#     ],
-#     'DEFAULT_PERMISSION_CLASSES': [
-#         'rest_framework.permissions.IsAuthenticated',
-#     ],
-#     'DEFAULT_PAGINATION_CLASS': 'rest_framework.pagination.PageNumberPagination',
-#     'PAGE_SIZE': 10,
-# }
-
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
@@ -167,8 +154,25 @@ STATIC_URL = '/static/'
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
+REDIS_HOST=env('REDIS_HOST')
+REDIS_PORT=env('REDIS_PORT')
+REDIS_DB=env('REDIS_DB')
+REDIS_PASSWORD = None  
+REDIS_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
 
 
+# #celery configs
+# CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
+# CELERY_RESULT_BACKEND =  f'redis://{REDIS_HOST}:{REDIS_PORT}/1'
+
+
+# CELERY_BEAT_SCHEDULE = {
+#     'sync-order-book': {
+#         'task': 'tasks.tasks.sync_order_book_task',
+#         'schedule': 5.0,
+#         'args': ('BTC_USDT',),  
+#     },
+# }
 
 #channel configs
 # CHANNEL_LAYERS = {
@@ -179,23 +183,3 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 #         },
 #     },
 # }
-
-REDIS_HOST=env('REDIS_HOST')
-REDIS_PORT=env('REDIS_PORT')
-REDIS_DB=env('REDIS_DB')
-REDIS_PASSWORD = None  
-REDIS_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/{REDIS_DB}'
-
-
-#celery configs
-CELERY_BROKER_URL = f'redis://{REDIS_HOST}:{REDIS_PORT}/0'
-CELERY_RESULT_BACKEND =  f'redis://{REDIS_HOST}:{REDIS_PORT}/1'
-
-
-CELERY_BEAT_SCHEDULE = {
-    'sync-order-book': {
-        'task': 'tasks.tasks.sync_order_book_task',
-        'schedule': 5.0,
-        'args': ('BTC_USDT',),  
-    },
-}

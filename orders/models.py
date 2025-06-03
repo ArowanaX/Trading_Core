@@ -35,8 +35,7 @@ class Order(BaseModel):
     amount = models.DecimalField(max_digits=32, decimal_places=8,validators=[MinValueValidator(0.000000000001)])
     filled_amount = models.DecimalField(max_digits=24, decimal_places=8, null=True, blank=True, default=Decimal('0.0'))
     remaining_amount = models.DecimalField(max_digits=32, decimal_places=8, default=Decimal('0.0'))
-    # low_limit = models.DecimalField(max_digits=40, decimal_places=16,validators=[MinValueValidator(0.000000000001)],null=True,blank=True)
-    # high_limit = models.DecimalField(max_digits=40, decimal_places=16,validators=[MinValueValidator(0.000000000001)],null=True,blank=True)
+
     
     def __str__(self):
         return f"{self.pk} : {self.target_market.base_currency}/{self.target_market.quote_currency}"

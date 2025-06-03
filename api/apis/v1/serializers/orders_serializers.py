@@ -10,7 +10,7 @@ class OrderCreateSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Order
-        fields = ['id', 'target_market', 'order_type', 'order_side', 'price', 'amount', 'low_limit', 'high_limit', 'order_state', 'filled_amount', 'created_at', 'updated_at', 'filled_at']
+        fields = ['id', 'target_market', 'order_type', 'order_side', 'price', 'amount', 'order_state', 'filled_amount', 'created_at', 'updated_at', 'filled_at']
         read_only_fields = ['id', 'order_state', 'filled_amount', 'created_at', 'updated_at', 'filled_at']
 
     def validate_target_market(self, value):
@@ -20,11 +20,6 @@ class OrderCreateSerializer(serializers.ModelSerializer):
         except Market.DoesNotExist:
             raise serializers.ValidationError(f"Market {value} does not exist.")
 
-    # def validate(self, data):
-    #     if data['order_type'] == 'limit' and (not data.get('low_limit') or not data.get('high_limit')):
-    #         raise serializers.ValidationError("low_limit and high_limit are required for limit orders.")
-    #     return data
-    
 
 
 class CancelOrderSerializer(serializers.Serializer):
@@ -32,7 +27,7 @@ class CancelOrderSerializer(serializers.Serializer):
 
     def validate_order_id(self, value):
         try:
-            order = Order.objects.get(id=value, order_state__in=['Waiting', 'PartiallyFilled'])
+            order = Order.objects.get(id=value, order_state__in=[Order.OrderState.WAITING, Order.OrderState.PARTIALLY_FILLED])
             return order
         except Order.DoesNotExist:
             raise serializers.ValidationError(f"Order {value} is not valid or cannot be canceled.")

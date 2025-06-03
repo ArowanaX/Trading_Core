@@ -361,4 +361,11 @@ class OrderBookService:
                 "error": str(e)
             }
 
+
+"""
+using singleton pattern
+This type of use of singleton must be executed on only one replica,
+otherwise it will cause race conditions, 
+but it is used due to the speed of the work.
+"""
 order_book_service = OrderBookService()

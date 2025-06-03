@@ -19,6 +19,7 @@ class OrderCreateUpdateView(APIView):
             return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
     
     def patch(self, request):
+        print(request.data)
         serializer = CancelOrderSerializer(data=request.data)
         if serializer.is_valid():
             with transaction.atomic():

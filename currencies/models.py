@@ -1,6 +1,7 @@
 from django.db import models
 from core.models import BaseModel
 from django.core.validators import MinValueValidator
+from django.core.exceptions import ValidationError
 from decimal import Decimal
 
 class Currency(models.Model):
@@ -42,4 +43,6 @@ class Market(BaseModel):
     
     def save(self, *args, **kwargs):
             self.symbol = self.get_symbol()
+            if self.base_currency == self.quote_currency:
+                raise ValidationError("Cant create market with same base and quote currency.!")
             super().save(*args, **kwargs)

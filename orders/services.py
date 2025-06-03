@@ -269,4 +269,11 @@ class MatchingEngine:
         except Exception as e:
             print(f"Error removing order {order.id} from order book: {str(e)}")
 
-engine = MatchingEngine() #using singleton pattern
+
+"""
+using singleton pattern
+This type of use of singleton must be executed on only one replica,
+otherwise it will cause race conditions, 
+but it is used due to the speed of the work.
+"""
+engine = MatchingEngine() 
